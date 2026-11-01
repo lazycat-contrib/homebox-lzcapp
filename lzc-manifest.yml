@@ -6,11 +6,10 @@ application:
       backend: file:///lzcapp/pkg/content/licenses/
     - location: /
       backend: http://homebox:7745/
-
 services:
   homebox:
-    # upstream: ghcr.io/sysadminsmedia/homebox:0.16.0
-    image: ghcr.1ms.run/sysadminsmedia/homebox:0.16.0
+    # upstream: sysadminsmedia/homebox:0.27.1
+    image: docker.1ms.run/sysadminsmedia/homebox:0.27.1
     environment:
       - HBOX_MODE=production
       # SQLite lives in the bound data directory; no external database.
@@ -27,7 +26,6 @@ services:
       - TZ=Asia/Shanghai
     binds:
       - /lzcapp/var/data:/data
-
 usage: |
   Homebox 是家庭物品清单：把家里的东西登记进去，记位置、保修期、价格和维修记录。
 
