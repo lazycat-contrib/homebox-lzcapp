@@ -1,0 +1,47 @@
+application:
+  subdomain: homebox
+  multi_instance: false
+  upstreams:
+    - location: /package-licenses/
+      backend: file:///lzcapp/pkg/content/licenses/
+    - location: /
+      backend: http://homebox:7745/
+
+services:
+  homebox:
+    # upstream: ghcr.io/sysadminsmedia/homebox:0.16.0
+    image: ghcr.1ms.run/sysadminsmedia/homebox:0.16.0
+    environment:
+      - HBOX_MODE=production
+      # SQLite lives in the bound data directory; no external database.
+      - HBOX_STORAGE_PREFIX_PATH=/data/
+      - HBOX_STORAGE_CONN_STRING=/data/homebox.db?_pragma=busy_timeout=2000&_pragma=journal_mode=WAL&_fk=1
+      # Registration stays open so the first user can create an account; there is
+      # no built-in default credential.
+      - HBOX_OPTIONS_ALLOW_REGISTRATION=true
+      - HBOX_OPTIONS_ALLOW_LOCAL_LOGIN=true
+      # Nothing leaves the deployment: no release checks, no analytics.
+      - HBOX_OPTIONS_GITHUB_RELEASE_CHECK=false
+      - HBOX_OPTIONS_ALLOW_ANALYTICS=false
+      - HBOX_OPTIONS_TRUST_PROXY=true
+      - TZ=Asia/Shanghai
+    binds:
+      - /lzcapp/var/data:/data
+
+usage: |
+  Homebox 是家庭物品清单：把家里的东西登记进去，记位置、保修期、价格和维修记录。
+
+  使用方法：
+  1. 打开应用，首次进入点「注册」创建第一个账号（本应用自己的账号）。
+  2. 登录后新建「位置」（房间/柜子）和「标签」，再逐个录入物品。
+  3. 物品可附照片、附件和保修信息；需要时可导出成表格备份。
+
+  数据与安全：
+  - 物品数据、照片与附件都保存在 /lzcapp/var/data 下的 SQLite 数据库里，卸载应用会一并删除，请定期导出备份。
+  - 本包不预置任何账号或默认口令；首个账号由你本人注册。注册保持开启，是为了让新装实例能建号。
+  - 已关闭版本检查与匿名统计，应用不会主动向外发送数据。
+  - 应用经懒猫入口鉴权访问，未开放无需登录的接口路径。
+
+  说明：
+  - 本包镜像版本为 0.16.0（镜像源实际发布版本），可能与上游最新发布号不同，功能以镜像为准。
+  - 未做真机验证：注册登录、物品录入、照片上传、导出以及重启后持久化均未在设备上实测。

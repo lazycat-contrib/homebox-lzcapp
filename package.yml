@@ -1,0 +1,18 @@
+package: community.lazycat.app.homebox
+version: 0.16.0
+name: Homebox
+description: "Home inventory system for tracking possessions, warranties and maintenance."
+min_os_version: "1.5.0"
+homepage: https://github.com/sysadminsmedia/homebox
+author: sysadminsmedia
+license: AGPL-3.0
+permissions:
+  required:
+    - net.internet
+locales:
+  zh:
+    name: Homebox
+    description: "家庭物品清单：登记物品、位置、保修与维修记录，支持标签与导出。"
+  en:
+    name: Homebox
+    description: "Home inventory system for tracking possessions, warranties and maintenance."
