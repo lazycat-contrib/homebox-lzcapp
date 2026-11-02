@@ -92,17 +92,16 @@ jobs:
               assert 'HBOX_OPTIONS_GITHUB_RELEASE_CHECK=false' in env
               assert 'HBOX_OPTIONS_ALLOW_ANALYTICS=false' in env
               # 0.27.x refuses to boot without an API key pepper of >=32 bytes.
-              assert HBOX_AUTH_API_KEY_PEPPER= in env
-              assert .U.api_key_pepper in env
-              params = yaml.safe_load(package.extractfile(deploy_params.yml).read())
-              by_id = {q[id]: q for q in params[params]}
-              assert api_key_pepper in by_id, by_id.keys()
-              assert by_id[api_key_pepper][type] == secret
-              assert by_id[api_key_pepper][optional] is False
-              assert random in str(by_id[api_key_pepper].get(default_value, ))
+              assert 'HBOX_AUTH_API_KEY_PEPPER=' in env
+              assert '.U.api_key_pepper' in env
+              params = yaml.safe_load(package.extractfile('deploy_params.yml').read())
+              by_id = {q['id']: q for q in params['params']}
+              assert 'api_key_pepper' in by_id, by_id.keys()
+              assert by_id['api_key_pepper']['type'] == 'secret'
+              assert by_id['api_key_pepper']['optional'] is False
+              assert 'random' in str(by_id['api_key_pepper'].get('default_value', ''))
               assert 'healthcheck' not in text
               assert 'lzc-file-chooser' not in text
-              assert not [n for n in names if n.endswith('deploy_params.yml')]
 
               with tarfile.open(fileobj=package.extractfile('content.tar')) as content:
                   members = content.getnames()
