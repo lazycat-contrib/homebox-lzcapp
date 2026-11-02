@@ -23,6 +23,10 @@ services:
       - HBOX_OPTIONS_GITHUB_RELEASE_CHECK=false
       - HBOX_OPTIONS_ALLOW_ANALYTICS=false
       - HBOX_OPTIONS_TRUST_PROXY=true
+      # API key hashes are HMAC-keyed with this pepper; the server refuses to
+      # start unless it is at least 32 bytes.
+      - |-
+        HBOX_AUTH_API_KEY_PEPPER={{ .U.api_key_pepper }}
       - TZ=Asia/Shanghai
     binds:
       - /lzcapp/var/data:/data
@@ -41,5 +45,5 @@ usage: |
   - 应用经懒猫入口鉴权访问，未开放无需登录的接口路径。
 
   说明：
-  - 本包镜像版本为 0.16.0（镜像源实际发布版本），可能与上游最新发布号不同，功能以镜像为准。
+  - 本包镜像版本为 0.27.1（镜像源实际发布版本），可能与上游最新发布号不同，功能以镜像为准。
   - 未做真机验证：注册登录、物品录入、照片上传、导出以及重启后持久化均未在设备上实测。
